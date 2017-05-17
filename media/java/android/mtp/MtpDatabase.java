@@ -42,6 +42,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 
+/// M: Added for USB Develpment debug, more log for more debuging help. @{
+import android.os.SystemProperties;/// M: Added Modification for ALPS00278882
+//import com.mediatek.xlog.SXlog;
+//import com.mediatek.xlog.Xlog;
+import java.lang.Integer;
+//Added Modification for ALPS00278882
+
 /**
  * {@hide}
  */
@@ -855,6 +862,37 @@ public class MtpDatabase {
                 }
                 value.getChars(0, length, outStringValue, 0);
                 outStringValue[length] = 0;
+				
+				/// M: Added for USB Develpment debug, more log for more debuging help @{
+                if(length > 0) {
+                    //SXlog.i(TAG, "getDeviceProperty  property = " + Integer.toHexString(property));
+                    //SXlog.i(TAG, "getDeviceProperty  value = " + value + ", length = " + length);
+                }
+                else if(SystemProperties.get("ro.sys.usb.mtp.whql.enable").equals("0"))
+                {
+                    //SXlog.i(TAG, "getDeviceProperty  length = " + length);
+                    /// M: Added Modification for ALPS00278882 @{
+                    if(property == MtpConstants.DEVICE_PROPERTY_DEVICE_FRIENDLY_NAME) {
+                        // Return the device name for the PC display if the FriendlyName is empty!!
+                        String deviceName;
+                        deviceName = SystemProperties.get("ro.product.model");
+
+                        int lengthDeviceName = deviceName.length();
+                        if (lengthDeviceName > 255) {
+                            lengthDeviceName = 255;
+                        }
+                        if(lengthDeviceName >0) {
+                            deviceName.getChars(0, lengthDeviceName, outStringValue, 0);
+                            outStringValue[lengthDeviceName] = 0;
+                            //SXlog.d(TAG, "getDeviceProperty  deviceName = " + deviceName + ", lengthDeviceName = " + lengthDeviceName);
+                        } else {
+                            //SXlog.d(TAG, "getDeviceProperty  lengthDeviceName = " + lengthDeviceName);
+                        }
+                    }
+                    /// M: @}
+                }
+                /// M: @}
+				
                 return MtpConstants.RESPONSE_OK;
 
             case MtpConstants.DEVICE_PROPERTY_IMAGE_SIZE:
