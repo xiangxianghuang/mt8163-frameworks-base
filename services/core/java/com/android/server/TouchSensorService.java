@@ -56,6 +56,23 @@ import java.util.Date;
 	      Tcontext.sendBroadcast(intent);
 		Slog.i(TAG, "t_head " + str); 
             }
+//-----------------cpu:mt8163--------------------
+	touch = "5micon".equals (event.get("SWITCH_NAME")) ? true : false;		   
+	   if(touch)
+	   {
+		  intent.putExtra("android.intent.extra.Touch", "5micon");
+		 Tcontext.sendBroadcast(intent);
+  		 Slog.i(TAG, "5mic " + str); 
+	   }
+	   touch = "5micoff".equals (event.get("SWITCH_NAME")) ? true : false;		   
+	   if(touch)
+	   {
+		  intent.putExtra("android.intent.extra.Touch", "5micoff");
+		 Tcontext.sendBroadcast(intent);
+  		 Slog.i(TAG, "5mic " + str); 
+	   }
+//---------------------end---------------------
+
 //-----------------y50-----------------------------------
 	  touch = "left".equals (event.get("SWITCH_NAME")) ? true : false;
             
