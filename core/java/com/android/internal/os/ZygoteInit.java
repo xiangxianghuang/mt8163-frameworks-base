@@ -59,6 +59,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+/*begin*/
+import android.os.Handler;
+/*end*/
+
 /// M: Added for BOOTPROF @{
 import java.io.ObjectOutputStream;
 import java.io.FileOutputStream;
@@ -261,17 +265,72 @@ public class ZygoteInit {
     }
     /// @}
     /// M: GMO Zygote64 on demand @}
-
+	
+	/*begin*/
+	private static Thread mCThread = new Thread(new Runnable(){
+    @Override
+    public void run(){
+    preloadClasses();
+	}
+	});
+	
+	private static Thread mRThread = new Thread(new Runnable(){
+	@Override
+	public void run(){
+	preloadResources();
+	}
+	});
+	private static Thread mOThread = new Thread(new Runnable(){
+    @Override
+    public void run(){
+    preloadOpenGL();
+	}
+	});
+	
+	private static Thread mSThread = new Thread(new Runnable(){
+	@Override
+	public void run(){
+	preloadSharedLibraries();
+	}
+	});
+	private static Thread mTThread = new Thread(new Runnable(){
+	@Override
+	public void run(){
+	preloadTextResources();
+	}
+	});	
+	/*end*/
     static void preload() {
         Log.d(TAG, "begin preload");
         Log.i(TAG1, "preloadMappingTable() -- start ");
         PluginLoader.preloadPluginInfo();
         Log.i(TAG1, "preloadMappingTable() -- end ");
+		/*
         preloadClasses();
         preloadResources();
         preloadOpenGL();
         preloadSharedLibraries();
         preloadTextResources();
+		*/
+		
+		/*begin*/ 
+		try{
+		mCThread.start();
+		mRThread.start();
+		mOThread.start();
+		mSThread.start();
+		mTThread.start();
+		
+		mCThread.join();
+		mRThread.join();
+		mOThread.join();
+		mSThread.join();
+		mTThread.join();
+		}catch(InterruptedException e){
+		Log.e(TAG,"Ltc,asyncPreload failed");
+		}
+		/*end*/
+		
         // Ask the WebViewFactory to do any initialization that must run in the zygote process,
         // for memory sharing purposes.
         WebViewFactory.prepareWebViewInZygote();
