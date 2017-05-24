@@ -71,6 +71,7 @@
 #include <system/audio.h>
 #include <private/gui/LayerState.h>
 
+
 #define PATH_COUNT 3
 #ifdef MTK_TER_SERVICE
 
@@ -489,7 +490,7 @@ bool BootAnimation::threadLoop()
     status_t mediastatus = NO_ERROR;
     if (resourcePath != NULL) {
         bPlayMP3 = true;
-        ALOGD("sound file path: %s", resourcePath);
+        ALOGE("sound file path: %s", resourcePath);
         mediaplayer = new MediaPlayer();
         mediastatus = mediaplayer->setDataSource(NULL, resourcePath, NULL);
 
@@ -508,6 +509,19 @@ bool BootAnimation::threadLoop()
             mediaplayer->setVolume(mVolume, mVolume); 
             // @}
             mediastatus = mediaplayer->start();
+
+	//----------by lifei-------------
+		   if (bBootOrShutDown) {	
+			} else {
+			//sleep(4);
+			int	 fd = open("/dev/misc_yyd", O_RDWR);
+			ALOGD("8888 fd=%d",fd);
+			   if(fd>0){
+				write(fd,"CC ",3);
+				close(fd);
+				   }
+				}	   
+   //-------------end---------------- 
         }
 
     }else{
@@ -517,22 +531,23 @@ bool BootAnimation::threadLoop()
     if (mZip == NULL) {
         r = android();
     } else {
-        if (!bETC1Movie) {
-            ALOGD("threadLoop() movie()");
+        if (!bETC1Movie) {	
+	  ALOGD("threadLoop() movie()");
             r = movie();
         } else {
             ALOGD("threadLoop() ETC1movie()");
             r = ETC1movie();
         }
     }
-
+	
     if (resourcePath != NULL) {
         if (mediastatus == NO_ERROR) {
-            mediaplayer->stop();
+            mediaplayer->stop();			
             mediaplayer->disconnect();
             mediaplayer.clear();
         }
     }
+
     eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
     eglDestroyContext(mDisplay, mContext);
     eglDestroySurface(mDisplay, mSurface);
@@ -1060,6 +1075,7 @@ void BootAnimation::initBootanimationZip() {
 
 void BootAnimation::initShutanimationZip() {
     ZipFileRO* zipFile = NULL;
+
     if (((access(SYSTEM_SHUTANIMATION_FILE, R_OK) == 0) &&
             ((zipFile = ZipFileRO::open(SYSTEM_SHUTANIMATION_FILE)) != NULL)) ||
 
