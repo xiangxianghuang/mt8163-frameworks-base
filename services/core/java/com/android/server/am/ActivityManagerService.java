@@ -5511,6 +5511,9 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     final void appDiedLocked(ProcessRecord app) {
+		if("com.yongyida.robot.voice".equals(app.processName)){
+                       return;
+               }
        appDiedLocked(app, app.pid, app.thread, false);
     }
 
