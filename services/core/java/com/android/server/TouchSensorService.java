@@ -71,6 +71,14 @@ import java.util.Date;
 		 Tcontext.sendBroadcast(intent);
   		 Slog.i(TAG, "5mic " + str); 
 	   }
+
+	   touch = "sos".equals (event.get("SWITCH_NAME")) ? true : false;		   
+	   if(touch)
+	   {
+		  intent.putExtra("android.intent.extra.Touch", "sos");
+		 Tcontext.sendBroadcast(intent);
+  		 Slog.i(TAG, "sos " + str); 
+	   }
 //---------------------end---------------------
 
 //-----------------y50-----------------------------------
