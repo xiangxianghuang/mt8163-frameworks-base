@@ -161,7 +161,7 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mSettingsButton.setOnClickListener(this);
 		
 		//yyd-peishengguo add start for 去掉Setting图标youxue项目
-		if(SystemProperties.get("ro.product.model").equals("UX20C"))
+		if(SystemProperties.get("ro.product.model").equals("YX20C"))
 		     mSettingsButton.setVisibility(View.INVISIBLE);
 		//yyd-peishengguo add end for 去掉Setting图标youxue项目
 		
