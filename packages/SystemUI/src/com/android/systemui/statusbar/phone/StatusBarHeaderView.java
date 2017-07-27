@@ -51,6 +51,7 @@ import com.android.systemui.statusbar.policy.NetworkControllerImpl.EmergencyList
 import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.tuner.TunerService;
+import android.os.SystemProperties;
 
 import java.text.NumberFormat;
 
@@ -158,6 +159,12 @@ public class StatusBarHeaderView extends RelativeLayout implements View.OnClickL
         mSettingsButton = (SettingsButton) findViewById(R.id.settings_button);
         mSettingsContainer = findViewById(R.id.settings_button_container);
         mSettingsButton.setOnClickListener(this);
+		
+		//yyd-peishengguo add start for 去掉Setting图标youxue项目
+		if(SystemProperties.get("ro.product.model").equals("UX20C"))
+		     mSettingsButton.setVisibility(View.INVISIBLE);
+		//yyd-peishengguo add end for 去掉Setting图标youxue项目
+		
         mQsDetailHeader = findViewById(R.id.qs_detail_header);
         mQsDetailHeader.setAlpha(0);
         mQsDetailHeaderTitle = (TextView) mQsDetailHeader.findViewById(android.R.id.title);
